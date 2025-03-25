@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BOGO Offer</title>
+    <style>
+        body {
+            font-family: "Nunito Sans", sans-serif;
+            background-color: #fff;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            background: #fff;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #FF6B82;
+        }
+        .offer-box {
+            border: 2px solid #C8C8C8;
+            padding: 20px;
+            margin: 22px 0;
+            border-radius: 3px;
+            position: relative;
+            cursor: pointer;
+        }
+        .offer-box.active {
+            border-color: #FF6B82;
+            background-color: #ffe4ec;
+        }
+        .offer-box .offer-box-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .discount {
+            background: #FF6B82;
+            color: white;
+            font-size: 12px;
+            padding: 4px 6px;
+            border-radius: 2px;
+        }
+         .most-popular {
+            position: absolute;
+            top: -10px;
+            right: 15px;
+            background: #ff4d6d;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 5px 12px;
+            border-radius: 4px;
+            display: inline-block;
+            text-transform: uppercase;
+        }
+
+        /* Creating the ribbon effect */
+        .most-popular::before, .most-popular::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 6px;
+            border-color: #b82b4c transparent transparent transparent;
+        }
+
+        .most-popular::before {
+           left: -7px;
+    top: -2px;
+    transform: rotate(179deg);
+    border-right-width: 8px;
+    border-left-width: 0;
+        }
+
+        .most-popular::after {
+              right: -9px;
+    top: 1px;
+    transform: rotate(267deg);
+    border-right-width: 8px;
+    border-left-width: 0;
+        }
+
+        
+        .size-color {
+            display: none;  /* Initially hidden */
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        .price {
+            font-size: 16px;
+            font-weight: 500;
+        }
+        .old-price {
+            text-decoration: line-through;
+            color: #8888889c;
+            font-size: 13px;
+            text-align: left;
+            padding-top: 5px;
+        }
+        .free-delivery {
+            color: #FF6B82;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        .btn {
+            background: #FF6B82;
+            color: white;
+            padding: 10px;
+            width: 100%;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .units-number{
+            font-weight: 600;
+        }
+        .strd-prc{
+            text-align: left;
+        }
+        .offer-box label div{
+                align-items: center;
+    display: flex
+;
+    gap: 13px;
+        }
+        .total-flex{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 15px;
+        }
+        .dropdown-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 20px 20px 20px 45px;
+        }
+
+        .dropdown-group {
+            display: flex;
+            align-items: center;
+        }
+
+        .dropdown-label {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .custom-dropdown {
+            position: relative;
+            width: 110px;
+        }
+        .dropdown-heading{
+            width: 66%;
+            text-align: center;
+            padding-bottom: 10px;
+        }
+
+        .dropdown-btn {
+            width: 70%;
+            background: white;
+            border: 2px solid #ddd;
+            padding: 8px 12px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dropdown-btn::after {
+            content: "▼";
+            font-size: 12px;
+            color: #333;
+            margin-left: 5px;
+        }
+
+        .dropdown-list {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: white;
+            border: 1px solid #ddd;
+            border-top: none;
+            display: none;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            z-index: 10;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .dropdown-list li {
+            padding: 10px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .dropdown-list li:hover {
+            background: #ff4d6d;
+            color: white;
+        }
+
+        .custom-dropdown.active .dropdown-list {
+            display: block;
+        }
+        .has-drop-container{
+                display: flex
+;
+    align-items: center;
+    gap: 10px;
+        }
+          .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .custom-radio {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .custom-radio input {
+            display: none; /* Hide the default radio button */
+        }
+
+        .radio-circle {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #FF6B82; /* Border color */
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+        }
+
+        .radio-circle::before {
+            content: "";
+            width: 10px;
+            height: 10px;
+            background: #FF6B82; /* Inner circle color */
+            border-radius: 50%;
+            transform: scale(0);
+            transition: transform 0.2s ease-in-out;
+        }
+
+        input:checked + .radio-circle::before {
+            transform: scale(1); /* Show inner circle when selected */
+        }
+        .display-none{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>YAY! It’s BOGO</h2>
+
+    <!-- 1 Unit Offer -->
+    <div class="offer-box" onclick="selectOffer(1)">
+        <label class="offer-box-container">
+            
+            <div>
+                   <div class="radio-group">
+        <label class="custom-radio">
+            <input type="radio" name="unit">
+            <span class="radio-circle"></span>
+            
+        </label>
+        </div>
+                 <span class="units-number">1 Unit </span> <span class="discount">10% Off</span>
+            </div>
+            
+            <span><span class="price">$10.00 USD</span> <div class="old-price">$24.00 USD</div></span>
+        </label>
+        <div class="strd-prc">Standard Price</div>
+       
+        <div class="size-color dropdown-container">
+        <div class="dropdown-group">
+             <div>
+            <div class="dropdown-heading">Size</div>
+            <div class="has-drop-container">
+                <div class="hastag-num">#1</div>
+                
+                <div class="custom-dropdown" id="sizeDropdown1">
+                    <div class="dropdown-btn">S</div>
+                    <ul class="dropdown-list">
+                        <li data-value="S">S</li>
+                        <li data-value="M">M</li>
+                        <li data-value="L">L</li>
+                    </ul>
+                </div>
+            </div>
+
+                </div>
+                <div>
+
+                                <div class="dropdown-heading">Colour</div>
+                                <div>
+
+                                    <div class="custom-dropdown" id="colorDropdown1">
+                                        <div class="dropdown-btn">Black</div>
+                                        <ul class="dropdown-list">
+                                            <li data-value="Black">Black</li>
+                                            <li data-value="Red">Red</li>
+                                            <li data-value="Blue">Blue</li>
+                                        </ul>
+                                
+                                    </div>
+                                </div>
+
+            </div>
+
+        </div>
+
+        <div class="dropdown-group">
+              <div class="has-drop-container">
+                <div class="hastag-num">#2</div>
+                
+                <div class="custom-dropdown" id="sizeDropdown2">
+                    <div class="dropdown-btn">S</div>
+                    <ul class="dropdown-list">
+                        <li data-value="S">S</li>
+                        <li data-value="M">M</li>
+                        <li data-value="L">L</li>
+                    </ul>
+                </div>
+            </div>
+<div>
+   <div class="custom-dropdown" id="colorDropdown2">
+                                        <div class="dropdown-btn">Colour</div>
+                                        <ul class="dropdown-list">
+                                            <li data-value="Black">Black</li>
+                                            <li data-value="Red">Red</li>
+                                            <li data-value="Blue">Blue</li>
+                                        </ul>
+                                
+                                    </div>
+</div>
+        
+        </div>
+    </div>
+
+        <input class="display-none" type="radio" name="offer" id="offer1">
+    </div>
+
+    <!-- 2 Unit Offer (Most Popular) -->
+    <div class="offer-box active" onclick="selectOffer(2)">
+        <div class="most-popular-container">
+
+            <div class="most-popular">MOST POPULAR</div>
+        </div>
+        <label class="offer-box-container">
+            
+            <div>
+                   <div class="radio-group">
+        <label class="custom-radio">
+            <input type="radio" name="unit" checked>
+            <span class="radio-circle"></span>
+            
+        </label>
+        </div>
+                 <span class="units-number">2 Unit </span> <span class="discount">20% Off</span></div>
+            <span><span class="price">$18.00 USD</span> <div class="old-price">$24.00 USD</div></span>
+        </label>
+        
+       <div class="size-color dropdown-container">
+        <div class="dropdown-group">
+             <div>
+            <div class="dropdown-heading">Size</div>
+            <div class="has-drop-container">
+                <div class="hastag-num">#1</div>
+                
+                <div class="custom-dropdown" id="sizeDropdown1">
+                    <div class="dropdown-btn">S</div>
+                    <ul class="dropdown-list">
+                        <li data-value="S">S</li>
+                        <li data-value="M">M</li>
+                        <li data-value="L">L</li>
+                    </ul>
+                </div>
+            </div>
+
+                </div>
+                <div>
+
+                                <div class="dropdown-heading">Colour</div>
+                                <div>
+
+                                    <div class="custom-dropdown" id="colorDropdown1">
+                                        <div class="dropdown-btn">Black</div>
+                                        <ul class="dropdown-list">
+                                            <li data-value="Black">Black</li>
+                                            <li data-value="Red">Red</li>
+                                            <li data-value="Blue">Blue</li>
+                                        </ul>
+                                
+                                    </div>
+                                </div>
+
+            </div>
+
+        </div>
+
+        <div class="dropdown-group">
+              <div class="has-drop-container">
+                <div class="hastag-num">#2</div>
+                
+                <div class="custom-dropdown" id="sizeDropdown2">
+                    <div class="dropdown-btn">S</div>
+                    <ul class="dropdown-list">
+                        <li data-value="S">S</li>
+                        <li data-value="M">M</li>
+                        <li data-value="L">L</li>
+                    </ul>
+                </div>
+            </div>
+<div>
+   <div class="custom-dropdown" id="colorDropdown2">
+                                        <div class="dropdown-btn">Colour</div>
+                                        <ul class="dropdown-list">
+                                            <li data-value="Black">Black</li>
+                                            <li data-value="Red">Red</li>
+                                            <li data-value="Blue">Blue</li>
+                                        </ul>
+                                
+                                    </div>
+</div>
+        
+        </div>
+    </div>
+        
+        <input class="display-none" type="radio" name="offer" id="offer2" checked>
+    </div>
+
+    <!-- 3 Unit Offer -->
+    <div class="offer-box" onclick="selectOffer(3)">
+        <label class="offer-box-container">
+            
+            <div>
+                   <div class="radio-group">
+        <label class="custom-radio">
+            <input type="radio" name="unit" >
+            <span class="radio-circle"></span>
+            
+        </label>
+        </div>
+                 <span class="units-number">3 Unit </span> <span class="discount">30% Off</span></div>
+            <span><span class="price">$24.00 USD</span> <div class="old-price">$24.00 USD</div></span>
+        </label>
+      <div class="size-color dropdown-container">
+        <div class="dropdown-group">
+             <div>
+            <div class="dropdown-heading">Size</div>
+            <div class="has-drop-container">
+                <div class="hastag-num">#1</div>
+                
+                <div class="custom-dropdown" id="sizeDropdown1">
+                    <div class="dropdown-btn">S</div>
+                    <ul class="dropdown-list">
+                        <li data-value="S">S</li>
+                        <li data-value="M">M</li>
+                        <li data-value="L">L</li>
+                    </ul>
+                </div>
+            </div>
+
+                </div>
+                <div>
+
+                                <div class="dropdown-heading">Colour</div>
+                                <div>
+
+                                    <div class="custom-dropdown" id="colorDropdown1">
+                                        <div class="dropdown-btn">Black</div>
+                                        <ul class="dropdown-list">
+                                            <li data-value="Black">Black</li>
+                                            <li data-value="Red">Red</li>
+                                            <li data-value="Blue">Blue</li>
+                                        </ul>
+                                
+                                    </div>
+                                </div>
+
+            </div>
+
+        </div>
+
+        <div class="dropdown-group">
+              <div class="has-drop-container">
+                <div class="hastag-num">#2</div>
+                
+                <div class="custom-dropdown" id="sizeDropdown2">
+                    <div class="dropdown-btn">S</div>
+                    <ul class="dropdown-list">
+                        <li data-value="S">S</li>
+                        <li data-value="M">M</li>
+                        <li data-value="L">L</li>
+                    </ul>
+                </div>
+            </div>
+<div>
+   <div class="custom-dropdown" id="colorDropdown2">
+                                        <div class="dropdown-btn">Colour</div>
+                                        <ul class="dropdown-list">
+                                            <li data-value="Black">Black</li>
+                                            <li data-value="Red">Red</li>
+                                            <li data-value="Blue">Blue</li>
+                                        </ul>
+                                
+                                    </div>
+</div>
+        
+        </div>
+    </div>
+        <input class="display-none" type="radio" name="offer" id="offer3">
+    </div>
+<div class="total-flex">
+        <div class="free-delivery">Free Delivery</div>
+
+    <div>
+        Total : $18.00 USD
+    </div>
+</div>
+    <button class="btn">+ Add to Cart</button>
+</div>
+
+<script>
+    function selectOffer(offer) {
+        // Remove active class from all
+        document.querySelectorAll('.offer-box').forEach(box => {
+            box.classList.remove('active');
+        });
+
+        // Set active class to selected offer
+        let selectedBox = document.querySelectorAll('.offer-box')[offer - 1];
+        selectedBox.classList.add('active');
+        document.getElementById('offer' + offer).checked = true;
+
+        // Hide all size-color sections
+        document.querySelectorAll('.size-color').forEach(el => el.style.display = 'none');
+
+        // Show the size-color sections for the selected offer
+        selectedBox.querySelectorAll('.size-color').forEach(el => el.style.display = 'flex');
+    }
+
+    // Show the size-color section for the default active (2nd) option on page load
+    window.onload = function() {
+        selectOffer(2);
+    };
+    
+</script>
+ <script>
+    
+        document.querySelectorAll('.custom-dropdown').forEach(dropdown => {
+            const btn = dropdown.querySelector('.dropdown-btn');
+            const list = dropdown.querySelector('.dropdown-list');
+
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.custom-dropdown').forEach(d => {
+                    if (d !== dropdown) {
+                        d.classList.remove('active');
+                    }
+                });
+                dropdown.classList.toggle('active');
+            });
+
+            list.querySelectorAll('li').forEach(item => {
+                item.addEventListener('click', () => {
+                    btn.textContent = item.textContent;
+                    dropdown.classList.remove('active');
+                });
+            });
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.custom-dropdown')) {
+                document.querySelectorAll('.custom-dropdown').forEach(d => d.classList.remove('active'));
+            }
+        });
+    </script>
+
+</body>
+</html>
