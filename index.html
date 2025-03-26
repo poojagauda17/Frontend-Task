@@ -24,7 +24,6 @@
         }
         .offer-box {
             border: 2px solid #C8C8C8;
-            padding: 20px;
             margin: 22px 0;
             border-radius: 3px;
             position: relative;
@@ -38,6 +37,8 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            cursor: pointer;
+            margin: 20px 20px 20px 20px;
         }
         .discount {
             background: #FF6B82;
@@ -90,7 +91,7 @@
 
         
         .size-color {
-            display: none;  /* Initially hidden */
+            display: none;  
             justify-content: space-between;
             margin-top: 10px;
         }
@@ -125,12 +126,13 @@
         }
         .strd-prc{
             text-align: left;
+            padding-left: 62px;
+            margin-top: -20px;
+            margin-bottom: 20px;
         }
         .offer-box label div{
                 align-items: center;
-    display: flex
-;
-    gap: 13px;
+
         }
         .total-flex{
             display: flex;
@@ -143,6 +145,7 @@
             flex-direction: column;
             gap: 10px;
             padding: 20px 20px 20px 45px;
+            margin: 0px 20px 20px 20px;
         }
 
         .dropdown-group {
@@ -238,13 +241,13 @@
         }
 
         .custom-radio input {
-            display: none; /* Hide the default radio button */
+            display: none; 
         }
 
         .radio-circle {
             width: 20px;
             height: 20px;
-            border: 2px solid #FF6B82; /* Border color */
+            border: 2px solid #FF6B82; 
             border-radius: 50%;
             display: inline-flex;
             align-items: center;
@@ -256,45 +259,65 @@
             content: "";
             width: 10px;
             height: 10px;
-            background: #FF6B82; /* Inner circle color */
+            background: #FF6B82; 
             border-radius: 50%;
             transform: scale(0);
             transition: transform 0.2s ease-in-out;
         }
 
         input:checked + .radio-circle::before {
-            transform: scale(1); /* Show inner circle when selected */
+            transform: scale(1); 
         }
         .display-none{
             display: none;
+
+        }
+        .border-container{
+                border-top: 2px solid #C8C8C8;
+                position: relative;
+                margin: 40px 0px;
+        }
+        .border-container h2{
+position: absolute;
+    position: absolute;
+    top: -36px;
+    background-color: white;
+    left: 32%;
+        }
+        .offer-box-container div{
+            display: flex;
+            gap: 8px;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>YAY! It’s BOGO</h2>
+    <div class="border-container">
+        <h2>YAY! It’s BOGO</h2>
+    </div>
 
     <!-- 1 Unit Offer -->
-    <div class="offer-box" onclick="selectOffer(1)">
+  
+ <div class="offer-box" onclick="selectOffer(1)">
         <label class="offer-box-container">
             
             <div>
                    <div class="radio-group">
         <label class="custom-radio">
-            <input type="radio" name="unit">
+            <input type="radio" name="unit" >
             <span class="radio-circle"></span>
             
         </label>
         </div>
-                 <span class="units-number">1 Unit </span> <span class="discount">10% Off</span>
-            </div>
-            
+                 <span class="units-number">1 Unit </span> <span class="discount">10% Off</span></div>
             <span><span class="price">$10.00 USD</span> <div class="old-price">$24.00 USD</div></span>
+            
         </label>
-        <div class="strd-prc">Standard Price</div>
-       
-        <div class="size-color dropdown-container">
+        <div class="strd-prc">
+Standard Price
+        </div>
+      <div class="size-color dropdown-container">
         <div class="dropdown-group">
              <div>
             <div class="dropdown-heading">Size</div>
@@ -359,10 +382,8 @@
         
         </div>
     </div>
-
         <input class="display-none" type="radio" name="offer" id="offer1">
     </div>
-
     <!-- 2 Unit Offer (Most Popular) -->
     <div class="offer-box active" onclick="selectOffer(2)">
         <div class="most-popular-container">
@@ -546,24 +567,19 @@
 
 <script>
     function selectOffer(offer) {
-        // Remove active class from all
         document.querySelectorAll('.offer-box').forEach(box => {
             box.classList.remove('active');
         });
 
-        // Set active class to selected offer
         let selectedBox = document.querySelectorAll('.offer-box')[offer - 1];
         selectedBox.classList.add('active');
         document.getElementById('offer' + offer).checked = true;
 
-        // Hide all size-color sections
         document.querySelectorAll('.size-color').forEach(el => el.style.display = 'none');
 
-        // Show the size-color sections for the selected offer
         selectedBox.querySelectorAll('.size-color').forEach(el => el.style.display = 'flex');
     }
 
-    // Show the size-color section for the default active (2nd) option on page load
     window.onload = function() {
         selectOffer(2);
     };
